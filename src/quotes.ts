@@ -1,13 +1,46 @@
 import 'source-map-support/register';
 import axios from 'axios'
+import {SLACK_HOOK} from "../config";
 
 interface MichaelScottQuote {
     quote: String;
-    authore: String;
+    author: String;
 }
-export const michaelscott = async (_event, _context) => {
-    return await axios.get<MichaelScottQuote>(`https://michael-scott-quotes.herokuapp.com/quote`).then((response) => {
+
+export const michaelscott = async (event) => {
+    return await axios.get<MichaelScottQuote>('https://michael-scott-quotes.herokuapp.com/quote').then((response) => {
         const quote = response.data;
-        return quote;
+
+        console.log(event);
+
+        if(event.hasOwnProperty('httpMethod') && event.httpMethod == 'POST') {
+            return axios.post(SLACK_HOOK, {
+                // text: `${quote.quote} - ${quote.author}`,
+                attachments: [
+                    {
+                        author_name: quote.author,
+                        title: quote.quote
+                    }
+                ]
+            }).then(() => {
+                return generateResponse(quote);
+            });
+        } else {
+            return generateResponse(quote);
+        }
     });
 };
+
+function generateResponse(quote) {
+    // Format for api gateway
+    return {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+        },
+        statusCode: 200,
+        body: JSON.stringify(
+            quote
+        ),
+    };
+}

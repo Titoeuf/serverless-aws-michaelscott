@@ -37,3 +37,9 @@ Invoke locally :
 ```bash
 sls invoke local --function hello
 ```
+
+
+Get Info ( like lost url ) : 
+```bash
+sls info
+```

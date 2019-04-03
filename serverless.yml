@@ -17,11 +17,18 @@ functions:
       - http:
           method: GET
           path: hello
-  inspirational-quote:
+  get-quote:
     handler: src/quotes.michaelscott
     events:
       - http:
           method: GET
-          path: send-quote
-      - schedule: rate(10 minutes)
-    memorySize: 128
+          path: quote
+          cors: true
+  send-quote:
+    handler: src/quotes.michaelscott
+    events:
+      - http:
+          method: POST
+          path: quote
+          cors: true
+      - schedule: rate(5 minutes)
