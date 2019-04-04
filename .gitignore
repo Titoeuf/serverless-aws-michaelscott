@@ -8,4 +8,8 @@ jspm_packages
 # Webpack directories
 .webpack
 
+# Config file
 config.ts
+
+# IDE directories
+.idea

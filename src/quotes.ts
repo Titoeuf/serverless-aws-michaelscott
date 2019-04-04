@@ -13,7 +13,9 @@ export const michaelscott = async (event) => {
 
         console.log(event);
 
-        if(event.hasOwnProperty('httpMethod') && event.httpMethod == 'POST') {
+        if(event.hasOwnProperty('httpMethod') && event.httpMethod == 'GET') {
+            return generateResponse(quote);
+        } else {
             return axios.post(SLACK_HOOK, {
                 // text: `${quote.quote} - ${quote.author}`,
                 attachments: [
@@ -25,8 +27,6 @@ export const michaelscott = async (event) => {
             }).then(() => {
                 return generateResponse(quote);
             });
-        } else {
-            return generateResponse(quote);
         }
     });
 };

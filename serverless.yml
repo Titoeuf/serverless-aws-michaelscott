@@ -31,4 +31,5 @@ functions:
           method: POST
           path: quote
           cors: true
-      - schedule: rate(5 minutes)
+      - schedule: cron(0 14 ? * MON-FRI *)
+#      - schedule: rate(60 minutes)
